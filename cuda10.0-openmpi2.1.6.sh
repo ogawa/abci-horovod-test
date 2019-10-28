@@ -35,7 +35,11 @@ pip3 install --upgrade setuptools
 
 # compatibility: gcc/7.3.0 cuda/10.0
 pip3 install "tensorflow-gpu>=1.13,<1.14" keras torch torchvision
-HOROVOD_GPU_ALLREDUCE=NCCL HOROVOD_NCCL_HOME=$NCCL_HOME HOROVOD_WITH_TENSORFLOW=1 pip3 install --no-cache-dir horovod
+HOROVOD_GPU_ALLREDUCE=NCCL \
+    HOROVOD_NCCL_HOME=$NCCL_HOME \
+    HOROVOD_WITH_TENSORFLOW=1 \
+    HOROVOD_WITH_PYTORCH=1 \
+    pip3 install --no-cache-dir horovod
 
 # Confirm
 pip3 list
@@ -56,9 +60,14 @@ MPIOPTS="-np ${NUM_PROCS} -map-by ppr:${NUM_GPUS_PER_NODE}:node"
 
 starttime=`date "+%Y/%m/%d %H:%M"`
 
-#mpirun ${MPIOPTS} python3 ${HOROVOD_EXAMPLES}/pytorch_mnist.py
-mpirun ${MPIOPTS} python3 ${HOROVOD_EXAMPLES}/tensorflow_mnist.py
-#mpirun ${MPIOPTS} python3 ${HOROVOD_EXAMPLES}/keras_mnist.py
+case "$1" in
+    "pytorch_mnist" | "tensorflow_mnist" | "tensorflow_word2vec" | "keras_mnist" )
+	mpirun ${MPIOPTS} python3 ${HOROVOD_EXAMPLES}/$1.py
+	;;
+    *)
+	echo "Usage: $0 pytorch_mnist | tensorflow_mnist | tensorflow_word2vec | keras_mnist"
+	;;
+esac
 
 endtime=`date "+%Y/%m/%d %H:%M"`
 
