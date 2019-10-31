@@ -10,7 +10,7 @@ source /etc/profile.d/modules.sh
 
 module load python/3.6/3.6.5
 
-module load cuda/10.0/10.0.130.1
+module load cuda/9.2/9.2.148.1
 module load cudnn/7.6/7.6.4
 module load nccl/2.4/2.4.8-1
 
@@ -19,8 +19,8 @@ module load openmpi/2.1.6
 
 # GCC 7.4.0
 # module load gcc/7.4.0
-export PATH=/apps/gcc/7.4.0/bin:$PATH
-export LD_LIBRARY_PATH=/apps/gcc/7.4.0/lib64:$LD_LIBRARY_PATH
+#export PATH=/apps/gcc/7.4.0/bin:$PATH
+#export LD_LIBRARY_PATH=/apps/gcc/7.4.0/lib64:$LD_LIBRARY_PATH
 
 #-------------------------------------------------------------
 # Setup python3-venv
@@ -33,12 +33,9 @@ source $ENV_NAME/bin/activate
 pip3 install --upgrade pip
 pip3 install --upgrade setuptools
 
-# compatibility: gcc/7.4.0 cuda/10.0
-pip3 install tensorflow-gpu==1.15 keras torch torchvision
+pip3 install mxnet-cu92
 HOROVOD_GPU_ALLREDUCE=NCCL \
-    HOROVOD_NCCL_HOME=$NCCL_HOME \
-    HOROVOD_WITH_TENSORFLOW=1 \
-    HOROVOD_WITH_PYTORCH=1 \
+    HOROVOD_WITH_MXNET=1 \
     pip3 install --no-cache-dir horovod
 
 # Confirm
@@ -61,11 +58,11 @@ MPIOPTS="-np ${NUM_PROCS} -map-by ppr:${NUM_GPUS_PER_NODE}:node"
 starttime=`date "+%Y/%m/%d %H:%M"`
 
 case "$1" in
-    "pytorch_mnist" | "tensorflow_mnist" | "tensorflow_word2vec" | "keras_mnist" )
+    "mxnet_mnist" )
 	mpirun ${MPIOPTS} python3 ${HOROVOD_EXAMPLES}/$1.py
 	;;
     *)
-	echo "Usage: $0 pytorch_mnist | tensorflow_mnist | tensorflow_word2vec | keras_mnist"
+	echo "Usage: $0 mxnet_mnist"
 	;;
 esac
 
