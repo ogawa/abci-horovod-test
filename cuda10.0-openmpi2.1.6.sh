@@ -21,6 +21,8 @@ module load openmpi/2.1.6
 # module load gcc/7.4.0
 export PATH=/apps/gcc/7.4.0/bin:$PATH
 export LD_LIBRARY_PATH=/apps/gcc/7.4.0/lib64:$LD_LIBRARY_PATH
+export LIBRARY_PATH=/apps/gcc/7.4.0/lib64:$LIBRARY_PATH
+export CPATH=/apps/gcc/7.4.0/include:$CPATH
 
 #-------------------------------------------------------------
 # Setup python3-venv
@@ -43,7 +45,7 @@ HOROVOD_GPU_ALLREDUCE=NCCL \
 
 # Confirm
 pip3 list
-module list
+module list -l
 nvidia-smi
 
 #-------------------------------------------------------------

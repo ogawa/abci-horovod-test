@@ -35,7 +35,7 @@ source $ENV_NAME/bin/activate
 pip3 install --upgrade pip
 pip3 install --upgrade setuptools
 
-pip3 install tensorflow==1.15 keras
+pip3 install tensorflow-gpu keras
 HOROVOD_GPU_ALLREDUCE=NCCL \
     HOROVOD_NCCL_HOME=$NCCL_HOME \
     HOROVOD_WITH_TENSORFLOW=1 \
@@ -61,11 +61,11 @@ MPIOPTS="-np ${NUM_PROCS} -map-by ppr:${NUM_GPUS_PER_NODE}:node"
 starttime=`date "+%Y/%m/%d %H:%M"`
 
 case "$1" in
-    "tensorflow_mnist" | "tensorflow_word2vec" | "keras_mnist" )
+    "tensorflow2_mnist" | "tensorflow2_keras_mnist" )
 	mpirun ${MPIOPTS} python3 ${HOROVOD_EXAMPLES}/$1.py
 	;;
     *)
-	echo "Usage: $0 tensorflow_mnist | tensorflow_word2vec | keras_mnist"
+	echo "Usage: $0 tensorflow2_mnist | tensorflow2_keras_mnist"
 	;;
 esac
 
