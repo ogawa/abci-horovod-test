@@ -18,11 +18,7 @@ module load nccl/2.4/2.4.8-1
 module load openmpi/2.1.6
 
 # GCC 7.4.0
-# module load gcc/7.4.0
-export PATH=/apps/gcc/7.4.0/bin:$PATH
-export LD_LIBRARY_PATH=/apps/gcc/7.4.0/lib64:$LD_LIBRARY_PATH
-export LIBRARY_PATH=/apps/gcc/7.4.0/lib64:$LIBRARY_PATH
-export CPATH=/apps/gcc/7.4.0/include:$CPATH
+module load gcc/7.4.0
 
 #-------------------------------------------------------------
 # Setup python3-venv
